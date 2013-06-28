@@ -1,0 +1,69 @@
+#ifndef _H_LEXER
+#define _H_LEXER
+
+#include "stdafx.h"
+#include "Tag.h"
+#include "FileManager.h"
+
+class Token
+{
+public:
+	int tag;			// 保存该词对应的编号
+	Token();
+	Token(int t);
+	virtual string ToString();
+	virtual string ToSign();
+};
+
+class Num : public Token
+{
+public:
+	int value;			// 该单词的值
+	Num();
+	Num(int v);
+	string ToString();
+};
+
+class Double : public Token
+{
+public:
+	double value;
+	Double();
+	Double(double v);
+	string ToString();
+};
+
+class Word : public Token
+{
+public:
+	string lexeme;		// 该字符串的内容
+	Word();
+	Word(string s, int tag);
+	string ToString();
+
+	static Word *eql, *neq, *leq, *geq, *lss, *gre;
+	static Word *plus, *minus, *plusplus, *minusminus, *mult, *div, *assign, *semicn, *comma, *dot;
+	static Word *lparent, *rparent, *lbrace, *rbrace;
+	static Word *True, *False;
+};
+
+class Lexer
+{
+public:
+	int lineID;			// 当前行数
+	char peek;			// 下一个要读取的字符
+
+	FileManager* fileManager;	// 文件管理器
+	vector<Token*> wordStream;	// 单词流
+	map<string, Word*> words;	//存储表
+	vector<int>	wordLine;		// 单词流对应的行数
+
+	Lexer();			
+	Token* Scan();		// 读取一个单词
+	void ReadCh();		// 读取一个字符
+	bool ReadCh(char ch);		// 读取判断字符是不是ch
+	void Reserve(Word* w);		//保存保留字
+	void MakeWordStream();		// 构造单词流
+
+};
+#endif

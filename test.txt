@@ -1,0 +1,49 @@
+script_stage_main
+{
+
+var x = -12.75 , y = 33, z = -345;	
+
+@Initialize
+{
+	wait(60);
+	getEnemyFromFile("filexxx",x,y); //生成一个单位
+	
+	loop(10)
+	{
+		getEnemyFromFile("filexxx",p * 10);//生成一堆单位
+	}
+
+	wait(50);
+	while (x < 10)
+	{
+		getEnemyFromFile("filexxx", x * 100);
+		x++; // x = x + 1;
+		wait(30);
+	}
+
+	WaitForZeroEnemy(); // 等待一个信号量
+	Wait(60);
+
+	getEnemyBossFromFile();
+	WaitForZeroEnemy();
+	Wait(60);
+	Clear();
+}
+
+@MainLoop()
+{
+	idle;
+}
+
+@Finalize()
+{
+}
+
+@Background()
+{
+}
+
+}
+
+
+
