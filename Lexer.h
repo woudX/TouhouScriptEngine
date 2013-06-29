@@ -47,6 +47,18 @@ public:
 	static Word *True, *False;
 };
 
+class Type : public Word {
+	int width;			// 用于分配存储空间
+	static Type *Double, *Int;
+
+	Type();
+	Type(string s, int tag, int w);
+	
+	static bool numeric(Type* p);
+	static Type* max(Type* l_type, Type* r_type);
+
+};
+
 class Lexer
 {
 public:
