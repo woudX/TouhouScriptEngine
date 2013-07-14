@@ -43,5 +43,13 @@
 #define LOOPTK		295
 #define INTCON		296
 #define DOUBLECON	297
-
+#define TOUHOUSCRIPT	298
+#define TITLE		299
+#define TEXT		300
+#define MUSIC		301
+#define IMAGE		302
+#define BACKGROUND	303
+#define PLAYER		304
+#define SCRIPTVERSION	305
+#define TEMP 306
 #endif

@@ -1,3 +1,12 @@
+#TouhouScript[Stage]
+#Title[ExRumia]
+#Text[ExRumia]
+#Music[".\music\Text.mp3"]
+#Image[".\img\ExRumia.png"]
+#BackGround[Default]
+#Player[FREE]
+#ScriptVersion[1]
+
 script_stage_main
 {
 
@@ -6,17 +15,17 @@ var x = -12.75 , y = 33, z = -345;
 @Initialize
 {
 	wait(60);
-	getEnemyFromFile("filexxx",x,y); //生成一个单位
+	getEnemyFromFile("..\script\a.ths",x,y); //生成一个单位
 	
 	loop(10)
 	{
-		getEnemyFromFile("filexxx",p * 10);//生成一堆单位
+		getEnemyFromFile("..\script\a.ths",p * 10);//生成一堆单位
 	}
 
 	wait(50);
 	while (x < 10)
 	{
-		getEnemyFromFile("filexxx", x * 100);
+		getEnemyFromFile("..\script\a.ths", x * 100);
 		x++; // x = x + 1;
 		wait(30);
 	}

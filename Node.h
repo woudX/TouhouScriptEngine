@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "Lexer.h"
 
-/// 万物之源——根节点
+/// 万物之源
 //////////////////////////////////////////////////////////////////////////
 
 class Node {
@@ -16,6 +16,9 @@ public:
 	Node(int l);
 	void error(string s);
 	int newlabel();
+
+	void emitlabel(int i);
+	void emit(string s);
 
 	~Node();
 };
@@ -48,12 +51,14 @@ public:
 	int offset;
 	Id();
 	Id(Word* id, Type* type, int l_offset);
+
+	~Id();
 };
 
 /// 操作符
 //////////////////////////////////////////////////////////////////////////
 
-class Op : public Id {
+class Op : public Expr {
 public:
 	Op();
 	Op(Token* token, Type* type);
@@ -176,6 +181,8 @@ public:
 
 	void jumping(int t, int f);
 	string ToString();
+
+	~Not();
 };
 
 /// 关系运算符
@@ -192,4 +199,172 @@ public:
 	~Rel();
 };
 
+/// 函数调用
+//////////////////////////////////////////////////////////////////////////
+
+class CallFunc : public Op {
+public:
+	Id* funcName;
+	vector<Expr*> params;
+
+	CallFunc();
+	CallFunc(Id* id);
+	Expr* gen();
+
+	void AddToParams(Expr* paramExpr);
+	string ToString();
+
+	~CallFunc();
+};
+
+/// 语句的中间代码
+//////////////////////////////////////////////////////////////////////////
+
+class Stmt : public Node {
+public:
+	static Stmt* Null;
+	int after;			// 保存语句下一条指令的标号
+
+	Stmt();
+	virtual void gen(int b, int a);
+
+	~Stmt();
+};
+
+/// IF语句
+//////////////////////////////////////////////////////////////////////////
+
+class If : public Stmt {
+public:
+	Expr* expr;
+	Stmt* stmt;
+
+	If();
+	If(Expr* expr, Stmt* stmt);
+	void gen(int b, int a);
+
+	~If();
+};
+
+/// Else语句
+//////////////////////////////////////////////////////////////////////////
+
+class Else : public Stmt {
+public:
+	Expr* expr;
+	Stmt *t_stmt, *f_stmt;
+
+	Else();
+	Else(Expr* expr, Stmt* t_stmt, Stmt* f_stmt);
+	void gen(int b, int a);
+
+	~Else();
+};
+
+/// For语句
+//////////////////////////////////////////////////////////////////////////
+
+class For : public Stmt
+{
+public:
+	Stmt* start;
+	Stmt* repeat;
+	If* domain;
+
+	For();
+
+	void init(If* iffm, Stmt* start, Stmt* repeat);
+	void gen(int b, int a);
+
+	~For();
+};
+
+/// While语句
+//////////////////////////////////////////////////////////////////////////
+
+class While : public Stmt
+{
+public:
+	Expr* expr;
+	Stmt* stmt;
+
+	While();
+	While(Expr* expr, Stmt* stmt);
+	void gen(int b, int a);
+
+	~While();
+
+};
+
+
+/// Loop语句
+//////////////////////////////////////////////////////////////////////////
+
+class Loop : public Stmt {
+public:
+	Expr* expr;
+	Stmt* stmt;
+
+	Loop();
+	Loop(Expr* expr, Stmt* stmt);
+	void gen(int b, int a);
+};
+
+/// 调用语句
+//////////////////////////////////////////////////////////////////////////
+
+class Call : public Stmt {
+public:
+	Expr* expr;
+	
+	Call();
+	void init(Expr* expr);
+	void gen(int b, int a);
+
+	~Call();
+};
+
+/// 赋值语句
+//////////////////////////////////////////////////////////////////////////
+
+class Set : public Stmt {
+public:
+	Id* id;
+	Expr* expr;
+	
+	Set();
+	Set(Id* id, Expr* epxr);
+	Type* check(Type* p1, Type p2);
+	void gen(int b, int a);
+
+	~Set();
+};
+
+/// 语句序列
+//////////////////////////////////////////////////////////////////////////
+
+class Seq : public Stmt {
+public:
+	Stmt *first_stmt, *second_stmt;
+
+	Seq();
+	Seq(Stmt* first_stmt, Stmt* second_stmt);
+	void gen(int b, int a);
+
+	~Seq();
+};
+
+/// 返回语句
+//////////////////////////////////////////////////////////////////////////
+
+class Return : public Stmt {
+public:
+	Expr* expr;
+
+	Return();
+	Return(Expr* expr);
+	void gen(int b, int a);
+
+	~Return();
+};
 #endif

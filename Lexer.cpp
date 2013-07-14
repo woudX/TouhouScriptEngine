@@ -68,6 +68,7 @@ Word* Word::rparent = new Word(")", RPARENT);
 Word* Word::lbrace = new Word("{", LBRACE);
 Word* Word::rbrace = new Word("}", RBRACE);
 
+Word* Word::temp = new Word("t", TEMP);
 Word* Word::True = new Word("true", TRUE);
 Word* Word::False = new Word("false", FALSE);
 
@@ -105,19 +106,57 @@ string Double::ToString()
 }
 
 
+/// Type
+//////////////////////////////////////////////////////////////////////////
+
+Type* Type::Double = new Type("double", DOUBLETK, 8);
+Type* Type::Int = new Type("int", INTTK, 4);
+
+Type::Type():width(0)
+{
+
+}
+
+Type::Type(string s, int tag, int w):Word(s, tag),width(w)
+{
+
+}
+
+bool Type::numeric(Type* p)
+{
+	return true;
+}
+
+Type* Type::max(Type* l_type, Type* r_type)
+{
+	// TO-DO: 暂时默认所有的变量都是Double类型
+
+	return Type::Double;
+}
+
 /// Lexer
 //////////////////////////////////////////////////////////////////////////
 
-Lexer::Lexer():lineID(1),peek(' '),fileManager(0)
+Lexer::Lexer():lineID(1),peek(' '),fileManager(0),nowWord(-1)
 {
 	Reserve(new Word("if", IFTK));
 	Reserve(new Word("else", ELSETK));
 	Reserve(new Word("while", WHILETK));
 	Reserve(new Word("loop", LOOPTK));
-	Reserve(new Word("MainLoop", MAINLOOPTK));
-	Reserve(new Word("Initialize", INITTK));
-	Reserve(new Word("Finalize",FINALTK));
-	Reserve(new Word("Background", BACKGROUNDTK));
+
+	Reserve(new Word("#TouhouScript", TOUHOUSCRIPT));
+	Reserve(new Word("#Title", TITLE));
+	Reserve(new Word("#Text", TEXT));
+	Reserve(new Word("#Music", MUSIC));
+	Reserve(new Word("#Image", IMAGE));
+	Reserve(new Word("#BackGround", BACKGROUND));
+	Reserve(new Word("#Player", PLAYER));
+	Reserve(new Word("#ScriptVersion", SCRIPTVERSION));
+
+	Reserve(new Word("@MainLoop", MAINLOOPTK));
+	Reserve(new Word("@Initialize", INITTK));
+	Reserve(new Word("@Finalize",FINALTK));
+	Reserve(new Word("@Background", BACKGROUNDTK));
 	Reserve(new Word("script_stage_main", STAGEMAIN));
 	Reserve(new Word("script_enemy_main", ENEMYMAIN));
 
@@ -144,13 +183,26 @@ bool Lexer::ReadCh(char ch)
 
 }
 
+string Lexer::getString() {
+	string bufferStr = "";
+	do 
+	{
+		bufferStr.append(1,peek);
+		ReadCh();
+	} while (isalpha(peek) || isdigit(peek) || peek == '_');
+
+	fileManager->Retrack(1);
+
+	return bufferStr;
+}
+
 Token* Lexer::Scan()
 {
 	// To-do: 读取一个单词并返回
 	peek = ' ';
 	for(;;ReadCh())
 	{
-		if (peek == ' ' || peek == '\t') continue;
+		if ( peek == ' ' || peek == '\t' || peek == '[' || peek == ']') continue;
 		else if (peek == '\n') ++lineID;
 		else if (peek == EOF)
 			break;		
@@ -279,16 +331,9 @@ Token* Lexer::Scan()
 		}
 	}
 
-	if (isalpha(peek))		// 如果是字符串
+	if (isalpha(peek) || (peek == '@' || peek == '#'))		// 如果是字符串或者是特定的字串
 	{
-		string bufferStr = "";
-		do 
-		{
-			bufferStr.append(1,peek);
-			ReadCh();
-		} while (isalpha(peek) || isdigit(peek) || peek == '_');
-
-		fileManager->Retrack(1);
+		string bufferStr = getString();
 
 		Word* w;
 
@@ -321,4 +366,32 @@ void Lexer::MakeWordStream()
 
 		token = Scan();
 	}
+}
+
+Token* Lexer::ScanWord()
+{
+	nowWord++;
+
+	if (nowWord < wordStream.size())
+	{
+		line = wordLine[nowWord];
+		return wordStream[nowWord];
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+Token* Lexer::RetrackWord(int num)
+{
+	if (nowWord - num < 0)
+	{
+		cout << "error: Lexer倒读超越了单词流边界" << endl;
+		exit(1);
+	}
+	
+	nowWord -= num;
+	line = wordLine[nowWord];
+	return wordStream[nowWord];
 }

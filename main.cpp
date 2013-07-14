@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Lexer.h"
+#include "Parser.h"
 
 int main()
 {
@@ -11,6 +12,11 @@ int main()
 	// 读取并进行词法分析
 	fileManager->ReadCodeFile("test.txt");
 	lexer->MakeWordStream();
+
+	cout << "---------------------" << endl;
+
+	Parser* parser = new Parser(lexer);
+	parser->ScriptAnalysis();
 
 
 

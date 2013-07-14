@@ -44,10 +44,11 @@ public:
 	static Word *eql, *neq, *leq, *geq, *lss, *gre;
 	static Word *plus, *minus, *plusplus, *minusminus, *mult, *div, *assign, *semicn, *comma, *dot;
 	static Word *lparent, *rparent, *lbrace, *rbrace;
-	static Word *True, *False;
+	static Word *True, *False, *temp;
 };
 
 class Type : public Word {
+public:
 	int width;			// 用于分配存储空间
 	static Type *Double, *Int;
 
@@ -64,6 +65,8 @@ class Lexer
 public:
 	int lineID;			// 当前行数
 	char peek;			// 下一个要读取的字符
+	int line;			// 当前读取单词的行数
+	int nowWord;		// 当前读取的单词
 
 	FileManager* fileManager;	// 文件管理器
 	vector<Token*> wordStream;	// 单词流
@@ -74,8 +77,13 @@ public:
 	Token* Scan();		// 读取一个单词
 	void ReadCh();		// 读取一个字符
 	bool ReadCh(char ch);		// 读取判断字符是不是ch
-	void Reserve(Word* w);		//保存保留字
+	void Reserve(Word* w);		// 保存保留字
 	void MakeWordStream();		// 构造单词流
+
+	Token* ScanWord();			// 获取单词流的一个单词
+	Token* RetrackWord(int num);	// 倒读指定数量的单词
+
+	string getString();			// 读取一个字符串
 
 };
 #endif

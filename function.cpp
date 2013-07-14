@@ -65,6 +65,14 @@ string AscToSign(int tag)
 		case INITTK: str = "INITTK"; break;
 		case FINALTK: str = "FINALTK"; break;
 		case BACKGROUNDTK: str = "BACKGROUNDTK"; break;
+		case TOUHOUSCRIPT: str = "TOUHOUSCRIPT"; break;
+		case TITLE: str = "TITLE"; break;
+		case TEXT: str = "TEXT"; break;
+		case MUSIC: str = "MUSIC"; break;
+		case IMAGE: str = "IMAGE"; break;
+		case BACKGROUND: str = "BACKGROUND"; break;
+		case PLAYER: str = "PLAYER"; break;
+		case SCRIPTVERSION: str = "SCRIPTVERSION"; break;
 		default: str = "ERROR"; break;
 		}
 	}
