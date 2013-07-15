@@ -1,21 +1,21 @@
-#include "FileManager.h"
+#include "FileMgr.h"
 
-FileManager* FileManager::_instance = 0;
+FileMgr* FileMgr::_instance = 0;
 
-FileManager* FileManager::Instance()
+FileMgr* FileMgr::Instance()
 {
 	if (_instance == 0)
-		_instance = new FileManager;
+		_instance = new FileMgr;
 
 	return _instance;
 }
 
-FileManager::FileManager():line(0),row(0)
+FileMgr::FileMgr():line(0),row(0)
 {
 
 }
 
-void FileManager::ReadCodeFile(string fileName)
+void FileMgr::ReadCodeFile(string fileName)
 {
 	inFile.open(fileName);
 
@@ -23,6 +23,8 @@ void FileManager::ReadCodeFile(string fileName)
 	{
 		printf("open file error");
 	}
+
+	this->fileName = fileName;
 
 	string tempCode;
 
@@ -35,7 +37,7 @@ void FileManager::ReadCodeFile(string fileName)
 	inFile.close();
 }
 
-char FileManager::ReadCh()
+char FileMgr::ReadCh()
 {
 	if (line >= codeFile.size())	// 模拟文件流结尾
 	{
@@ -54,7 +56,7 @@ char FileManager::ReadCh()
 	return ch;
 }
 
-void FileManager::Retrack(int t)
+void FileMgr::Retrack(int t)
 {
 	int num = t;
 
@@ -70,7 +72,7 @@ void FileManager::Retrack(int t)
 	}
 }
 
-FileManager::~FileManager()
+FileMgr::~FileMgr()
 {
 
 }

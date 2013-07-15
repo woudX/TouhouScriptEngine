@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include "Tag.h"
-#include "FileManager.h"
+#include "FileMgr.h"
 
 class Token
 {
@@ -68,9 +68,9 @@ public:
 	int line;			// 当前读取单词的行数
 	int nowWord;		// 当前读取的单词
 
-	FileManager* fileManager;	// 文件管理器
+	FileMgr* fileManager;	// 文件管理器
 	vector<Token*> wordStream;	// 单词流
-	map<string, Word*> words;	//存储表
+	map<string, Word*> words;	// 存储表
 	vector<int>	wordLine;		// 单词流对应的行数
 
 	Lexer();			

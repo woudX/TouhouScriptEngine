@@ -4,12 +4,14 @@
 #include "stdafx.h"
 #include "Lexer.h"
 #include "Node.h"
+#include "THScriptMgr.h"
 
 class Parser
 {
 public:
-	FileManager* fileManager;		// 文件管理器
-	Lexer* lexer;					// 词法分析器
+	FileMgr* fileManager;		// 文件管理器
+	THScriptMgr* scriptMgr;		// 脚本管理器
+	Lexer* lexer;				// 词法分析器
 	Token* look;
 
 	Parser();

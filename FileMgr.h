@@ -3,24 +3,25 @@
 
 #include "stdafx.h"
 
-class FileManager {
+class FileMgr {
 public:
-	FileManager* Instance();
 	vector<string> codeFile;
+	string fileName;			// 脚本文件名
 	ifstream inFile;
 	ofstream outFile;
 
+	FileMgr* Instance();
 	void ReadCodeFile(string fileName);		// 读取目标文件
 	char ReadCh();							// 读取一个字符
 	void Retrack(int t);					// 倒读t个字符
 	int line,row;
 
-	~FileManager();
+	~FileMgr();
 protected:
-	FileManager();
+	FileMgr();
 
 private:
-	static FileManager* _instance;
+	static FileMgr* _instance;
 };
 
 #endif

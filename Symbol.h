@@ -5,11 +5,18 @@
 
 // Symbol的类型type取值
 	
-#define DOUBLE	0		// 浮点数类型
-#define INT		1		// 整数类型
-#define STRING	2		// 字符串类型
-#define BOOL	3		// 布尔类型
-#define VOID	4		// 无类型
+#define TYPE_DOUBLE	0		// 浮点数类型
+#define TYPE_INT	1		// 整数类型
+#define TYPE_STRING	2		// 字符串类型
+#define TYPE_BOOL	3		// 布尔类型
+#define TYPE_VOID	4		// 无类型
+
+// Symbol的种类kind取值
+#define KIND_CONST	20		//常量
+#define KIND_VAR	21		//变量
+#define KIND_TVAR	22		//临时变量
+#define	KIND_PROC	23		//过程头部
+#define KIND_FUNC	24		//函数头部
 
 class Symbol
 {
@@ -21,7 +28,7 @@ public:
 
 	Symbol();
 	Symbol(string name, int type, int kind);
-
+	Symbol(string name, int type, int kind, double value);
 	~Symbol();
 };
 

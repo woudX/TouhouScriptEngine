@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "Lexer.h"
 #include "Parser.h"
+#include "SymbolTable.h"
 
 int main()
 {
-	FileManager* fileManager = 0;
+	
+	FileMgr* fileManager = 0;
 	fileManager = fileManager->Instance();
 
 	Lexer* lexer = new Lexer();
@@ -17,8 +19,6 @@ int main()
 
 	Parser* parser = new Parser(lexer);
 	parser->ScriptAnalysis();
-
-
-
+	
 	return 0;
 }
