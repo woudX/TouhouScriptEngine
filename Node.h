@@ -32,7 +32,7 @@ public:
 	Type* type;
 
 	Expr();
-	Expr(Token* token, Type* type);
+	Expr(Token* token, Type* v_type);
 
 	virtual Expr* gen();
 	virtual Expr* reduce();
@@ -75,7 +75,7 @@ class Arith : public Op {
 public:
 	Expr *l_expr, *r_expr;
 	Arith();
-	Arith(Token* token, Expr* l_expr, Expr* r_expr);
+	Arith(Token* token, Expr* v_l_expr, Expr* v_r_expr);
 
 	Expr* gen();
 	string ToString();
@@ -90,7 +90,7 @@ class Unary : public Op {
 public:
 	Expr *expr;
 	Unary();
-	Unary(Token* token, Expr* expr);
+	Unary(Token* token, Expr* v_expr);
 
 	Expr* gen();
 	string ToString();
@@ -135,7 +135,7 @@ class Logical : public Expr {
 public:
 	Expr *l_expr, *r_expr;
 	Logical();
-	Logical(Token* token, Expr* l_expr, Expr* r_expr);
+	Logical(Token* token, Expr* v_l_expr, Expr* v_r_expr);
 
 	virtual Type* check(Type* l_type, Type* r_type);
 	Expr* gen();
@@ -240,7 +240,7 @@ public:
 	Stmt* stmt;
 
 	If();
-	If(Expr* expr, Stmt* stmt);
+	If(Expr* v_expr, Stmt* v_stmt);
 	void gen(int b, int a);
 
 	~If();
@@ -255,7 +255,7 @@ public:
 	Stmt *t_stmt, *f_stmt;
 
 	Else();
-	Else(Expr* expr, Stmt* t_stmt, Stmt* f_stmt);
+	Else(Expr* v_expr, Stmt* v_t_stmt, Stmt* v_f_stmt);
 	void gen(int b, int a);
 
 	~Else();
@@ -289,7 +289,7 @@ public:
 	Stmt* stmt;
 
 	While();
-	While(Expr* expr, Stmt* stmt);
+	While(Expr* v_expr, Stmt* v_stmt);
 	void gen(int b, int a);
 
 	~While();
@@ -333,7 +333,7 @@ public:
 	Expr* expr;
 	
 	Set();
-	Set(Id* id, Expr* epxr);
+	Set(Id* v_id, Expr* v_epxr);
 	Type* check(Type* p1, Type p2);
 	void gen(int b, int a);
 
@@ -348,7 +348,7 @@ public:
 	Stmt *first_stmt, *second_stmt;
 
 	Seq();
-	Seq(Stmt* first_stmt, Stmt* second_stmt);
+	Seq(Stmt* v_first_stmt, Stmt* v_second_stmt);
 	void gen(int b, int a);
 
 	~Seq();

@@ -11,6 +11,7 @@ script_stage_main
 {
 
 var x = -12.75 , y = 33, z = -345;	
+var ds, kp = 3, sss;
 
 @Initialize
 {

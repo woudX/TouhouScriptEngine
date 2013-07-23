@@ -52,4 +52,8 @@
 #define PLAYER		304
 #define SCRIPTVERSION	305
 #define TEMP 306
+#define OR 307
+#define AND 308
+#define NOT 309
+
 #endif

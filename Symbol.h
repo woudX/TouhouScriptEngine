@@ -2,6 +2,7 @@
 #define _H_SYMBOL
 
 #include "stdafx.h"
+#include "Node.h"
 
 // Symbol的类型type取值
 	
@@ -30,6 +31,8 @@ public:
 	Symbol(string name, int type, int kind);
 	Symbol(string name, int type, int kind, double value);
 	~Symbol();
+
+	Id* ToID();
 };
 
 #endif // !_H_SYMBOL

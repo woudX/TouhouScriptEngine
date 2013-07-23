@@ -43,7 +43,7 @@ Expr::Expr():op(NULL),type(NULL)
 
 }
 
-Expr::Expr(Token* token, Type* type):op(token),type(type) 
+Expr::Expr(Token* token, Type* v_type):op(token),type(v_type) 
 {
 
 }
@@ -141,7 +141,7 @@ Arith::Arith():l_expr(NULL),r_expr(NULL)
 
 }
 
-Arith::Arith(Token* token, Expr* l_expr, Expr* r_expr):Op(token, NULL),l_expr(l_expr),r_expr(r_expr)
+Arith::Arith(Token* token, Expr* v_l_expr, Expr* v_r_expr):Op(token, NULL),l_expr(v_l_expr),r_expr(v_r_expr)
 {
 	if (l_expr != NULL && r_expr != NULL)
 	{
@@ -175,7 +175,7 @@ Unary::Unary():expr(NULL)
 
 }
 
-Unary::Unary(Token* token, Expr* expr):Op(token, NULL),expr(expr)
+Unary::Unary(Token* token, Expr* v_expr):Op(token, NULL),expr(v_expr)
 {
 	if (expr != NULL)
 	{
@@ -260,7 +260,7 @@ Logical::Logical():l_expr(NULL),r_expr(NULL)
 
 }
 
-Logical::Logical(Token* token, Expr* l_expr, Expr* r_expr):Expr(token, NULL),l_expr(l_expr),r_expr(r_expr)
+Logical::Logical(Token* token, Expr* v_l_expr, Expr* v_r_expr):Expr(token, NULL),l_expr(v_l_expr),r_expr(v_r_expr)
 {
 	type = check(l_expr->type, r_expr->type);
 }
@@ -474,6 +474,8 @@ CallFunc::~CallFunc()
 /// 语句的中间代码
 //////////////////////////////////////////////////////////////////////////
 
+Stmt* Stmt::Null = new Stmt;
+
 Stmt::Stmt():after(0)
 {
 
@@ -497,7 +499,7 @@ If::If():expr(NULL),stmt(NULL)
 
 }
 
-If::If(Expr* expr, Stmt* stmt):expr(expr),stmt(stmt)
+If::If(Expr* v_expr, Stmt* v_stmt):expr(v_expr),stmt(v_stmt)
 {
 
 }
@@ -523,7 +525,7 @@ Else::Else():expr(NULL),t_stmt(NULL),f_stmt(NULL)
 
 }
 
-Else::Else(Expr* expr, Stmt* t_stmt, Stmt* f_stmt):expr(expr),t_stmt(t_stmt),f_stmt(f_stmt)
+Else::Else(Expr* v_expr, Stmt* v_t_stmt, Stmt* v_f_stmt):expr(v_expr),t_stmt(v_t_stmt),f_stmt(v_f_stmt)
 {
 
 }
@@ -591,7 +593,7 @@ While::While():expr(NULL),stmt(NULL)
 
 }
 
-While::While(Expr* expr, Stmt* stmt):expr(expr),stmt(stmt)
+While::While(Expr* v_expr, Stmt* v_stmt):expr(v_expr),stmt(v_stmt)
 {
 
 }
@@ -649,7 +651,7 @@ Set::Set():id(NULL),expr(NULL)
 
 }
 
-Set::Set(Id* id, Expr* epxr):id(id),expr(expr)
+Set::Set(Id* v_id, Expr* v_expr):id(v_id),expr(v_expr)
 {
 
 }
@@ -677,7 +679,7 @@ Seq::Seq():first_stmt(NULL),second_stmt(NULL)
 
 }
 
-Seq::Seq(Stmt* first_stmt, Stmt* second_stmt):first_stmt(first_stmt),second_stmt(second_stmt)
+Seq::Seq(Stmt* v_first_stmt, Stmt* v_second_stmt):first_stmt(v_first_stmt),second_stmt(v_second_stmt)
 {
 
 }

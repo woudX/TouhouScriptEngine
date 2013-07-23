@@ -73,6 +73,9 @@ string AscToSign(int tag)
 		case BACKGROUND: str = "BACKGROUND"; break;
 		case PLAYER: str = "PLAYER"; break;
 		case SCRIPTVERSION: str = "SCRIPTVERSION"; break;
+		case OR: str = "OR";
+		case AND: str = "AND";
+		case NOT: str = "NOT";
 		default: str = "ERROR"; break;
 		}
 	}

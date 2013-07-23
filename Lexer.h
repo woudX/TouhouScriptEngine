@@ -41,7 +41,7 @@ public:
 	Word(string s, int tag);
 	string ToString();
 
-	static Word *eql, *neq, *leq, *geq, *lss, *gre;
+	static Word *eql, *neq, *leq, *geq, *lss, *gre, *and, *or, *not;
 	static Word *plus, *minus, *plusplus, *minusminus, *mult, *div, *assign, *semicn, *comma, *dot;
 	static Word *lparent, *rparent, *lbrace, *rbrace;
 	static Word *True, *False, *temp;

@@ -1,6 +1,6 @@
 #include "THScript.h"
 
-THScript::THScript():top(NULL)
+THScript::THScript():symRoot(NULL)
 {
 
 }

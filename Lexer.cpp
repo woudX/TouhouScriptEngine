@@ -45,10 +45,13 @@ string Num::ToString()
 /// Word
 //////////////////////////////////////////////////////////////////////////
 
-Word* Word::eql  = new Word("==", EQL);
-Word* Word::neq  = new Word("!=", NEQ);
-Word* Word::leq  = new Word("<=", LEQ);
-Word* Word::geq  = new Word(">=", GEQ);
+Word* Word::eql = new Word("==", EQL);
+Word* Word::neq = new Word("!=", NEQ);
+Word* Word::leq = new Word("<=", LEQ);
+Word* Word::geq = new Word(">=", GEQ);
+Word* Word::and = new Word("&&", AND);
+Word* Word::or  = new Word("||", OR);
+Word* Word::not = new Word("!", NOT);
 
 Word* Word::plus = new Word("+", PLUS);
 Word* Word::plusplus = new Word("++", PLUSPLUS);
@@ -143,6 +146,7 @@ Lexer::Lexer():lineID(1),peek(' '),fileManager(0),nowWord(-1)
 	Reserve(new Word("else", ELSETK));
 	Reserve(new Word("while", WHILETK));
 	Reserve(new Word("loop", LOOPTK));
+	Reserve(new Word("var", VARTK));
 
 	Reserve(new Word("#TouhouScript", TOUHOUSCRIPT));
 	Reserve(new Word("#Title", TITLE));
@@ -211,6 +215,20 @@ Token* Lexer::Scan()
 
 	switch (peek)		// 判断各种字符
 	{
+	case '&':
+		if (ReadCh('&')) return Word::and;
+		else
+		{
+			fileManager->Retrack(1);
+			return new Token('&');
+		}
+	case '|':
+		if (ReadCh('|')) return Word::or;
+		else
+		{
+			fileManager->Retrack(1);
+			return new Token('|');
+		}
 	case '=':
 		if (ReadCh('=')) return Word::eql;
 		else 
@@ -223,7 +241,7 @@ Token* Lexer::Scan()
 		else 
 		{
 			fileManager->Retrack(1);
-			return new Token('!');
+			return Word::not;
 		}
 	case '<':
 		if (ReadCh('=')) return Word::leq;
@@ -293,23 +311,19 @@ Token* Lexer::Scan()
 
 	if (isdigit(peek))	// 如果读取到的是数字
 	{
-		bool isInt = true;		// 保存数字标记
 
-		int value = 0;			// 保存INT
 		double doubleValue = 0;	// 保存DOUBLE
 		
 		do 
 		{
-			value = value * 10 + (peek - '0');
+			doubleValue = doubleValue * 10 + (peek - '0');
 			ReadCh();
 		} while (isdigit(peek));
 
 		if (peek == '.')
 		{
 			ReadCh();
-			doubleValue = value;
 			double mod = 1;
-			isInt = false;
 
 			while (isdigit(peek))
 			{
@@ -321,14 +335,7 @@ Token* Lexer::Scan()
 
 		fileManager->Retrack(1);
 
-		if (isInt)		// 判断是整型还是浮点型
-		{
-			return new Num(value);
-		}
-		else
-		{
-			return new Double(doubleValue);
-		}
+		return new Double(doubleValue);
 	}
 
 	if (isalpha(peek) || (peek == '@' || peek == '#'))		// 如果是字符串或者是特定的字串

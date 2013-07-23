@@ -17,7 +17,8 @@ public:
 	string player;				// 玩家数量
 	string scriptVersion;		// 脚本版本号
 
-	SymbolTable* top;			// 脚本变量表
+	SymbolTable* symRoot;			// 脚本变量表
+
 
 	void SetValue(string varStr, string value);
 
