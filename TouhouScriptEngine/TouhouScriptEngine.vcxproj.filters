@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Script">
+      <UniqueIdentifier>{3845a491-4bf1-4792-9927-b65ec4e0bd4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Script\ScriptInterpreter">
+      <UniqueIdentifier>{53150726-8ce8-4deb-912a-2b81fa3b99b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Script\ScriptInterpreter\Lexer">
+      <UniqueIdentifier>{1e6afee9-de37-4e72-8464-1e27d6b5284c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Script\ScriptInterpreter\Parser">
+      <UniqueIdentifier>{95bcdf70-4d15-4fd6-96f0-cdd2eeebe51a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Script\ScriptInterpreter\Symbols">
+      <UniqueIdentifier>{4bf02a3f-0154-46e0-a33d-faaed95b28af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Script\ScriptData">
+      <UniqueIdentifier>{2759990b-3bd2-4f0f-89b2-a1749599c930}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Script_cpp">
+      <UniqueIdentifier>{d66697fd-7fed-4763-bdd6-8ae27dfc196e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Script_cpp\ScriptData_cpp">
+      <UniqueIdentifier>{df5091f2-f358-47f6-88af-9f82e48a38d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Script_cpp\ScriptInterpreter_cpp">
+      <UniqueIdentifier>{7f9eb118-ba97-4c35-9631-62d8d7fb23cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Script_cpp\ScriptInterpreter_cpp\Lexer_cpp">
+      <UniqueIdentifier>{c5c7c99d-7c34-4fa7-acdc-635a9b482984}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Script_cpp\ScriptInterpreter_cpp\Parser_cpp">
+      <UniqueIdentifier>{bc9b2afd-facf-4be0-beed-bdeb873ea445}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Script_cpp\ScriptInterpreter_cpp\Symbols_cpp">
+      <UniqueIdentifier>{ff8a4b58-28d5-47e3-8ff9-939714983057}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="function.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Lexer.cpp">
+      <Filter>Source Files\Script_cpp\ScriptInterpreter_cpp\Lexer_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Source Files\Script_cpp\ScriptInterpreter_cpp\Parser_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser.cpp">
+      <Filter>Source Files\Script_cpp\ScriptInterpreter_cpp\Parser_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Symbol.cpp">
+      <Filter>Source Files\Script_cpp\ScriptInterpreter_cpp\Symbols_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="SymbolTable.cpp">
+      <Filter>Source Files\Script_cpp\ScriptInterpreter_cpp\Symbols_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="FileMgr.cpp">
+      <Filter>Source Files\Script_cpp\ScriptInterpreter_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="THScriptMgr.cpp">
+      <Filter>Source Files\Script_cpp\ScriptData_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="THScript.cpp">
+      <Filter>Source Files\Script_cpp\ScriptData_cpp</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Script.h">
+      <Filter>Header Files\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTable.h">
+      <Filter>Header Files\Script\ScriptInterpreter</Filter>
+    </ClInclude>
+    <ClInclude Include="function.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Lexer.h">
+      <Filter>Header Files\Script\ScriptInterpreter\Lexer</Filter>
+    </ClInclude>
+    <ClInclude Include="Tag.h">
+      <Filter>Header Files\Script\ScriptInterpreter\Lexer</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Header Files\Script\ScriptInterpreter\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser.h">
+      <Filter>Header Files\Script\ScriptInterpreter\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbol.h">
+      <Filter>Header Files\Script\ScriptInterpreter\Symbols</Filter>
+    </ClInclude>
+    <ClInclude Include="SymbolTable.h">
+      <Filter>Header Files\Script\ScriptInterpreter\Symbols</Filter>
+    </ClInclude>
+    <ClInclude Include="THScript.h">
+      <Filter>Header Files\Script\ScriptData</Filter>
+    </ClInclude>
+    <ClInclude Include="THScriptMgr.h">
+      <Filter>Header Files\Script\ScriptData</Filter>
+    </ClInclude>
+    <ClInclude Include="FileMgr.h">
+      <Filter>Header Files\Script\ScriptInterpreter</Filter>
+    </ClInclude>
+    <ClInclude Include="Error.h">
+      <Filter>Header Files\Script\ScriptInterpreter\Parser</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

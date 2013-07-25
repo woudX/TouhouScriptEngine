@@ -1,0 +1,31 @@
+#TouhouScript[Stage]
+#Title[ExRumia]
+#Text[ExRumia]
+#Music[".\music\Text.mp3"]
+#Image[".\img\ExRumia.png"]
+#BackGround[Default]
+#Player[FREE]
+#ScriptVersion[1]
+
+script_stage_main
+{
+	var start, end;
+	
+	@Initialize
+	{
+		start = 100;
+		end = 200;
+	}
+	
+	@MainLoop
+	{
+		if (SYSTEM.time > start && SYSTEM.time < end)
+		{
+			var x,y;
+			x = getPlayerX();
+			y = getPlayerY();
+			
+			makeBullet01(1,x+20, y+20, 2,45);
+		}
+	}
+}

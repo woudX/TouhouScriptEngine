@@ -1,0 +1,88 @@
+#TouhouScript[Stage]
+#Title[ExRumia]
+#Text[ExRumia]
+#Music[".\music\Text.mp3"]
+#Image[".\img\ExRumia.png"]
+#BackGround[Default]
+#Player[FREE]
+#ScriptVersion[1]
+
+script_stage_main
+{
+
+var x = -12.75 , y = 33, z = -345;	
+var ds, kp = 3, sss;
+
+@Initialize
+{
+	var p1 = 14, p2 = 1, p3=20;
+	var p4, i;
+	
+	/*
+	for (i = 1; i < 10; i = i + 1)
+	{
+		p1 = p1 + 1;
+	}
+	*/
+	
+	
+	while ((p1 > 22) && !(p1 <= 58 && p3 == 20 || !(p2 == 1)))
+	{
+		p1 = p1 - 1;
+	}
+	
+	
+	if (p1 == 1)
+	{
+		p1 = 35+ 70;
+		
+		if (p1 == 2)
+			p1 = 3;
+		else 
+			p1 = 4;
+	}
+	else if (p1 == 3)
+	{
+		p1 = p1 - 5;
+	}
+	else 
+		p1 = -55;
+	
+	
+	
+	/*
+	while (p1 <= 58) 
+	{
+		p1 = p1 + 1;
+	}
+
+	{
+		var s_1, s_2, s_3 = 100;	
+		s_3 = s_3 + 10;
+	}
+	*/
+	
+}
+
+@MainLoop
+{
+/*
+	var p1, p2;
+	p1 = getPlayerX();
+	var a,b,c,d;
+	p2 = getNowTime(getPlayerX(), getPlayerY());
+	*/
+}
+
+@Finalize
+{
+}
+
+@Background
+{
+}
+
+}
+
+
+
