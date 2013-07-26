@@ -59,6 +59,12 @@ Word* Word::minus = new Word("-", MINUS);
 Word* Word::minusminus = new Word("--", MINUSMINUS);
 Word* Word::mult = new Word("*", MULT);
 Word* Word::div = new Word("/", DIV);
+Word* Word::assign_plus = new Word("+=", ASSIGN_PLUS);
+Word* Word::assign_minus = new Word("-=", ASSIGN_MINUS);
+Word* Word::assign_mult = new Word("*=", ASSIGN_MULT);
+Word* Word::assign_div = new Word("/=", ASSIGN_DIV);
+
+
 Word* Word::lss = new Word("<", LSS);
 Word* Word::gre = new Word(">", GRE);
 Word* Word::assign = new Word("=", ASSIGN);
@@ -265,19 +271,30 @@ Token* Lexer::Scan()
 			return Word::gre;
 		}
 	case '+':
-		if (ReadCh('+')) return Word::plusplus;
-		else
 		{
-			fileManager->Retrack(1);
-			return Word::plus;
+			ReadCh();
+
+			if (peek == '+') return Word::plusplus;
+			else if (peek == '=') return Word::assign_plus;
+			else
+			{
+				fileManager->Retrack(1);
+				return Word::plus;
+			}
 		}
 	case '-':
-		if (ReadCh('-')) return Word::minusminus;
-		else
 		{
-			fileManager->Retrack(1);
-			return Word::minus;
+			ReadCh();
+
+			if (peek == '-') return Word::minusminus;
+			else if (peek == '=') return Word::assign_minus;
+			else
+			{
+				fileManager->Retrack(1);
+				return Word::minus;
+			}
 		}
+		
 	case '"':
 		{
 			Word* w;
@@ -320,6 +337,8 @@ Token* Lexer::Scan()
 					}
 				}
 			}
+			else if (peek == '=')
+				return Word::assign_div;
 			else
 			{
 				fileManager->Retrack(1);
@@ -329,7 +348,20 @@ Token* Lexer::Scan()
 			break;
 		}
 		
-	case '*':	return Word::mult;
+	case '*':	
+		{
+			ReadCh();
+
+			if (peek == '=')
+				return Word::assign_mult;
+			else
+			{
+				fileManager->Retrack(1);
+				return Word::mult;
+			}
+			
+		}
+		
 	case ';':	return Word::semicn;
 	case ',':	return Word::comma;
 	case '(':	return Word::lparent;
@@ -372,7 +404,7 @@ Token* Lexer::Scan()
 	if (isalpha(peek) || (peek == '@' || peek == '#'))		// 如果是字符串或者是特定的字串
 	{
 		string bufferStr = getString();
-
+		
 		Word* w;
 
 		if (words.find(bufferStr) != words.end())		// 已经存在了

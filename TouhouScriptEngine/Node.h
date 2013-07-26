@@ -98,6 +98,20 @@ public:
 	~Unary();
 };
 
+/// 单目后置运算符
+//////////////////////////////////////////////////////////////////////////
+
+class UnaryAfter : public Unary {
+public:
+	UnaryAfter();
+	UnaryAfter(Token* token, Expr* v_expr);
+
+	Expr* gen();
+	string ToString();
+
+	~UnaryAfter();
+};
+
 /// 临时变量
 //////////////////////////////////////////////////////////////////////////
 
@@ -337,6 +351,24 @@ public:
 	void gen(int b, int a);
 
 	~Set();
+};
+
+
+/// 运算赋值语句
+//////////////////////////////////////////////////////////////////////////
+
+class AssignSet : public Stmt {
+public:
+	Id* id;
+	Expr* expr;
+	Token* op;
+
+	AssignSet();
+	AssignSet(Id* v_id, Token* v_op, Expr* v_expr);
+	Type* check(Type* p1, Type p2);
+	void gen(int b, int a);
+
+	~AssignSet();
 };
 
 /// 语句序列

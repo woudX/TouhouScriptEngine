@@ -198,6 +198,31 @@ Unary::~Unary()
 
 }
 
+/// 单目后置运算符
+//////////////////////////////////////////////////////////////////////////
+
+UnaryAfter::UnaryAfter():Unary()
+{
+
+}
+
+UnaryAfter::UnaryAfter(Token* token, Expr* v_expr):Unary(token, v_expr)
+{
+
+}
+
+Expr* UnaryAfter::gen()
+{
+	return new UnaryAfter(op, expr->reduce());
+}
+
+string UnaryAfter::ToString()
+{
+	return expr->ToString() + " " + op->ToString();
+}
+
+
+
 /// 临时变量
 //////////////////////////////////////////////////////////////////////////
 
@@ -215,7 +240,7 @@ Temp::Temp(Type* type):Expr(Word::temp, type)
 
 string Temp::ToString()
 {
-	return "t" + IntToString(number) + "_" + type->ToString();
+	return "SYS_T_" + IntToString(number); // + "_" + type->ToString();
 }
 
 Temp::~Temp()
@@ -572,27 +597,23 @@ void For::gen(int b, int a)
 	int label1 = newlabel();	// 初始化语句
 	int label2 = newlabel();	// 条件更新位置
 
-	start->gen(b, label1);
-	emitlabel(label1);
+	if (start != NULL)
+		start->gen(b, label1);
 
-	expr->gen()->jumping(0, a);
-	body->gen(label1, label2);
+	emitlabel(label1);			// 初始化后标记
 
-	emitlabel(label2);
-	repeat->gen(label2, 0);
+	if (expr != NULL)
+		expr->gen()->jumping(0, a);
+
+	if (body != NULL)
+		body->gen(label1, label2);
+
+	emitlabel(label2);			// 循环体累加前
+
+	if (repeat != NULL)
+		repeat->gen(label2, 0);
+
 	emit("goto L" + IntToString(label1));
-
-	/*
-	start->gen(b, label1);
-	emitlabel(label1);
-	domain->expr->jumping(0, a);	// 判断是否符合循环条件
-
-	emitlabel(label2);
-	domain->stmt->gen(label2, 0);
-
-	repeat->gen(b, label2);			// 循环参数更新
-	emit("goto L" + IntToString(label1));
-	*/
 }
 
 For::~For()
@@ -685,6 +706,32 @@ Set::~Set()
 {
 
 }
+
+
+/// 运算赋值语句
+//////////////////////////////////////////////////////////////////////////
+
+AssignSet::AssignSet():id(NULL),expr(NULL),op(NULL)
+{
+
+}
+
+AssignSet::AssignSet(Id* v_id, Token* v_op, Expr* v_expr):id(v_id),expr(v_expr),op(v_op)
+{
+
+}
+
+Type* AssignSet::check(Type* p1, Type p2)
+{
+	return p1;
+}
+
+void AssignSet::gen(int b, int a)
+{
+	string val = expr->reduce()->gen()->ToString();
+	emit(id->ToString() + " " + op->ToString() + " " + val);
+}
+
 
 /// 语句序列
 //////////////////////////////////////////////////////////////////////////

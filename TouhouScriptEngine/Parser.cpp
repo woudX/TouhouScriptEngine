@@ -74,7 +74,6 @@ void Parser::ScriptType()
 		Node::labels = 0;
 
 	}
-
 	Match(RBRACE, ERR_BRACE);
 }
 
@@ -272,8 +271,8 @@ Stmt* Parser::StmtOne_Call()
 	Retrack(1);		// 退回函数识别重新开始
 	
 	Id* id = new Id(new Word(look->ToString(), IDEN), Type::Func, Type::Func->width);
+	Move();
 
-	// TO-DO: 返回平台后的函数
 	CallFunc* callFunc = _funcParam(id);
 
 	// 生成一个函数调用
@@ -286,8 +285,8 @@ Stmt* Parser::StmtOne_Call()
 
 Stmt* Parser::StmtOne_For()
 {
-	Expr* expr;
-	Stmt *start_stmt, *cycle_stmt, *body_stmt;
+	Expr* expr = NULL;
+	Stmt *start_stmt = NULL, *cycle_stmt = NULL, *body_stmt = NULL;
 
 	Move();
 	Match(LPARENT, ERR_PARENT);
@@ -312,9 +311,11 @@ Stmt* Parser::StmtOne_For()
 	else
 		body_stmt = StmtOne();
 
-	
+	For* forTemp = new For();
 
-	return NULL;
+	forTemp->init(start_stmt, expr, cycle_stmt, body_stmt);
+
+	return forTemp;
 }
 
 Stmt* Parser::StmtOne()
@@ -338,6 +339,13 @@ Stmt* Parser::StmtOne()
 	case LBRACE:	return Block();
 	case WHILETK:	return StmtOne_While();
 	case FORTK:		return StmtOne_For();
+	case PLUSPLUS:
+	case MINUSMINUS:
+		{
+			Expr* unary = _unary();
+			return new Set((Id*)(((Unary*)unary)->expr), unary);
+		}
+		
 	default:
 		{
 			// 判断是否有函数调用
@@ -356,45 +364,50 @@ Stmt* Parser::Assign()
 {
 	Stmt* stmt = NULL;
 
-	if (look->tag == PLUSPLUS)
+	Symbol* symbol = symTop->GetSymbol(look->ToString());
+
+	if (symbol == NULL)
 	{
-		Move();
-
-		Symbol* symbol = symTop->GetSymbol(look->ToString());
-
-		if (symbol == NULL)
-		{
-			Error("变量" + look->ToString() + "未定义");
-		}
-
-		// stmt = new Set(symbol->ToID());
+		Error("变量" + look->ToString() + "未定义");
 	}
-	else
+
+	Move();
+
+	switch (look->tag)
 	{
-		Symbol* symbol = symTop->GetSymbol(look->ToString());
-
-		if (symbol == NULL)
-		{
-			Error("变量" + look->ToString() + "未定义");
-		}
-
-		Move();
-
-		if (look->tag == ASSIGN)
+	case ASSIGN:
 		{
 			Move();
 			stmt = new Set(symbol->ToID(), _bool());
 			stmt->lexline = lexer->line;
-		}
-		else
-		{
-			Error("表达式非法");
-		}
 
-		
+			break;
+		}
+	case ASSIGN_PLUS: case ASSIGN_MINUS: case ASSIGN_MULT: case ASSIGN_DIV: 
+		{
+			Token* tok = look;
+			Move();
+			stmt = new AssignSet(symbol->ToID(), tok, _bool());
+			
+			break;
+		}
+	case PLUSPLUS: case MINUSMINUS:
+		{
+			Token* tok = look;
+			Move();
+			stmt = new Set(symbol->ToID(), new Unary(tok, symbol->ToID()));
+
+			break;
+		}
+	default:
+		Error("表达式非法");
+		break;
 	}
 
-	Match(SEMICN, ERR_SEMICN);
+	if (look->tag == COMMA)
+		Match(COMMA, ERR_COMMA);
+	else
+		Match(SEMICN, ERR_SEMICN);
 
 	return stmt;
 }
@@ -538,6 +551,7 @@ Expr* Parser::_unary()
 	else return _factor();
 }
 
+
 Expr* Parser::_factor()
 {
 	Expr* expr = NULL;
@@ -573,13 +587,19 @@ Expr* Parser::_factor()
 			{
 				return _funcParam(new Id(new Word(name, IDEN), Type::Func, Type::Func->width));
 			}
+			else if (look->tag == PLUSPLUS || look->tag == MINUSMINUS)
+			{
+				Id* idTemp = symTemp->ToID();
+				UnaryAfter* unaryAfter = new UnaryAfter(look, idTemp);
+
+				Move();
+				return unaryAfter;
+			}
 			else
 			{
 				Id* idTemp = symTemp->ToID();
 				return idTemp;
 			}
-			
-			
 		}
 	default:
 		break;

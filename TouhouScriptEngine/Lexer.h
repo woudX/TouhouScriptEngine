@@ -43,6 +43,7 @@ public:
 
 	static Word *eql, *neq, *leq, *geq, *lss, *gre, *and, *or, *not;
 	static Word *plus, *minus, *plusplus, *minusminus, *mult, *div, *assign, *semicn, *comma, *dot;
+	static Word *assign_plus, *assign_minus, *assign_mult, *assign_div;
 	static Word *lparent, *rparent, *lbrace, *rbrace;
 	static Word *True, *False, *temp;
 	static Word *note, *note_a, *note_b;

@@ -61,4 +61,8 @@
 #define NULL_A 313
 #define FUNCTK 314
 #define FORTK 315
+#define ASSIGN_PLUS 316
+#define ASSIGN_MINUS 317
+#define ASSIGN_MULT 318
+#define ASSIGN_DIV 319
 #endif

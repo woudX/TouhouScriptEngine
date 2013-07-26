@@ -90,6 +90,10 @@ string AscToSign(int tag)
 		case NULL_A: str = "NULL_A"; break;
 		case FUNCTK: str = "FUNCTK"; break;
 		case FORTK:	str = "FORTK"; break;
+		case ASSIGN_PLUS: str = "ASSIGN_PLUS"; break;
+		case ASSIGN_MINUS: str = "ASSIGN_MINUS"; break;
+		case ASSIGN_MULT: str = "ASSIGN_MULT"; break;
+		case ASSIGN_DIV: str = "ASSIGN_DIV"; break;
 		default: str = "ERROR"; break;
 		}
 	}
