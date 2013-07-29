@@ -2,7 +2,7 @@
 #include "Lexer.h"
 #include "Parser.h"
 #include "SymbolTable.h"
-
+#include "THScriptMgr.h"
 int main()
 {
 	int a,b;
@@ -22,5 +22,9 @@ int main()
 	Parser* parser = new Parser(lexer);
 	parser->ScriptAnalysis();
 	
+	THScriptMgr* scriptMgr = 0;
+	scriptMgr = scriptMgr->Instance();
+
+
 	return 0;
 }

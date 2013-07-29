@@ -20,16 +20,41 @@ script_stage_main
 	@MainLoop
 	{
 		var SYS_time;
+		SYS_time = (5 > 3) + (5 < 3);
+		
 		if (SYS_time > start && SYS_time < end)
 		{
 			var x,y;
+			x = x && y || ( x == 2);
 			x = getPlayerX();
 			y = getPlayerY();
 			x += 30;
 			++x;
+			x++;
 			x = 1, y=2;
 			y -= 50 + x;
 			makeBullet01(1,x+20, y+20, 2,45);
 		}
+		
+		var i = 3;
+		while (i >= 0)
+			i--;
+			
+		for (i = 0; i < 10; i++;)
+		{
+			var t;
+			if (i < 10)
+				t = 5;
+			else
+				t = i;
+		}
+	}
+	
+	@Finalize
+	{
+	}
+
+	@Background
+	{
 	}
 }

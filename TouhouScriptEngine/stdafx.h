@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <string>
 #include <vector>
+#include <list>
 #include <map>
 #include <regex>
 

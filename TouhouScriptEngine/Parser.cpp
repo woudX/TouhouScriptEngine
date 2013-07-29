@@ -88,6 +88,8 @@ void Parser::ScriptAnalysis()
 
 	ScriptHeader();					// 分析脚本头部声明，鉴定脚本类型
 	ScriptType();					// 分析脚本类型及其内容
+
+	scriptMgr->lastScript->TranslateScript();		// 语法分析结束后开始第一轮翻译
 	
 }
 
@@ -167,6 +169,8 @@ int Parser::FuncHeader()
 	// 临时处理
 	if (look->tag != RBRACE)
 	{
+		scriptMgr->lastScript->AddToStream(look->ToString());	// 添加到脚本中间代码刘
+
 		cout << endl << "------" + look->ToString() + "------" << endl;
 		Move();
 		return 1;

@@ -1,5 +1,6 @@
 #include "Node.h"
 #include "function.h"
+#include "THScriptMgr.h"
 
 /// ¸ù½Úµã
 //////////////////////////////////////////////////////////////////////////
@@ -22,11 +23,21 @@ int Node::newlabel()
 
 void Node::emitlabel(int i) 
 {
+	THScriptMgr* scriptMgr = 0;
+	scriptMgr = scriptMgr->Instance();
+
+	scriptMgr->lastScript->AddToStream("L" + IntToString(i) + ":");
+
 	cout << "L" << i << ":";
 }
 
 void Node::emit(string s) 
 {
+	THScriptMgr* scriptMgr = 0;
+	scriptMgr = scriptMgr->Instance();
+
+	scriptMgr->lastScript->AddToStream(s);
+
 	cout << "\t" << s << endl;
 }
 

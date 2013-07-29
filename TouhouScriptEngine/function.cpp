@@ -100,3 +100,34 @@ string AscToSign(int tag)
 
 	return str;
 }
+
+vector<string> split(string str, char ch) 
+{
+	vector<string> result;
+	string lstr = str + ch;
+	int size = lstr.size();
+
+	int i = 0;
+	while (size != 0)
+	{
+		
+		while (lstr[i] == ch && i < size) { ++i; }
+		int start = i;
+
+		while (lstr[i] != ch && i < size) { ++i; }
+		int end = i;
+
+		string ans = lstr.substr(start, end - start);
+
+		if (start != end)
+			result.push_back(ans);
+
+		lstr = lstr.substr(end, size - end);
+
+		size = lstr.size();
+		i = 0;
+
+	}
+
+	return result;
+}
