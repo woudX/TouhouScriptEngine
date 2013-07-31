@@ -683,6 +683,13 @@ void Call::init(Expr* expr)
 void Call::gen(int b, int a)
 {
 	emit(expr->gen()->ToString());
+
+	CallFunc* callFunc = (CallFunc*)expr;
+
+	int label = newlabel();//popÓÃÐÐ
+	emitlabel(label);
+
+	emit("pop " + IntToString(callFunc->params.size()));
 }
 
 Call::~Call()

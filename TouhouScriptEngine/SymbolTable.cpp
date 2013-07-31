@@ -1,26 +1,24 @@
 #include "SymbolTable.h"
 
-SymbolTable::SymbolTable():father(NULL),sonIndex(-1)
+int SymbolTable::_nextId = 0;
+
+SymbolTable::SymbolTable():father(NULL),sonIndex(-1),tableId(-1)
 {
 
 }
 
-SymbolTable::SymbolTable(SymbolTable* father):father(father),sonIndex(-1)
+SymbolTable::SymbolTable(SymbolTable* father):father(father),sonIndex(-1),tableId(-1)
 {
 
-}
-
-SymbolTable::~SymbolTable()
-{
-	for (map<string, Symbol*>::iterator itor = symbolMap.begin(); itor != symbolMap.end(); )
-		itor = symbolMap.erase(itor);
-
-	symbolMap.clear();
 }
 
 SymbolTable* SymbolTable::MakeNewSymbolTable()
 {
 	SymbolTable* symTable = new SymbolTable(this);
+
+	symTable->tableId = _nextId;
+	_nextId++;
+
 	son.push_back(symTable);
 
 	return symTable;
@@ -34,6 +32,21 @@ void SymbolTable::ResetSymbolTableStatus()
 	{
 		son[index]->ResetSymbolTableStatus();
 	}
+}
+
+void SymbolTable::ResetSymbolTableValue()
+{
+	for (map<string, Symbol*>::iterator itor = symbolMap.begin(); itor != symbolMap.end(); ++itor)
+	{
+		Symbol* symbol = (*itor).second;
+
+		// 以后扩展类型后再补充
+		if (true || symbol->type == TYPE_DOUBLE)
+			symbol->value = 0;
+	}
+
+	for (vector<SymbolTable*>::iterator itor = son.begin(); itor != son.end(); ++itor)
+		(*itor)->ResetSymbolTableValue();
 }
 
 SymbolTable* SymbolTable::GetNextSymbolTable()
@@ -80,4 +93,26 @@ Symbol* SymbolTable::_FindSymbol(SymbolTable* symTable, string name)
 	{
 		return itor->second;
 	}
+}
+
+SymbolTable::~SymbolTable()
+{
+	for (map<string, Symbol*>::iterator itor = symbolMap.begin(); itor != symbolMap.end(); )
+		itor = symbolMap.erase(itor);
+	symbolMap.clear();
+
+	for (vector<SymbolTable*>::iterator itor = son.begin(); itor != son.end(); )
+	{
+		if (*itor != NULL)
+		{
+			delete *itor;
+			*itor = NULL;
+			itor = son.erase(itor);
+		}
+		else
+		{
+			itor++;
+		}
+	}
+	son.clear();
 }

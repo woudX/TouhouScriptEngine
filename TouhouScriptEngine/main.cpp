@@ -3,6 +3,7 @@
 #include "Parser.h"
 #include "SymbolTable.h"
 #include "THScriptMgr.h"
+#include "Object.h"
 int main()
 {
 	int a,b;
@@ -25,6 +26,8 @@ int main()
 	THScriptMgr* scriptMgr = 0;
 	scriptMgr = scriptMgr->Instance();
 
+	Object* object = new Object(scriptMgr->GetTHScriptByFileName("test.ths"));
+	delete scriptMgr->GetTHScriptByFileName("test.ths");
 
 	return 0;
 }

@@ -18,5 +18,17 @@ void QuadGroup::AddQuad(Quad* quad)
 
 QuadGroup::~QuadGroup()
 {
+	for (vector<Quad*>::iterator itor = quadList.begin(); itor != quadList.end(); )
+	{
+		if (*itor != NULL)
+		{
+			delete *itor;
+			*itor = NULL;
+			itor = quadList.erase(itor);
+		}
+		else
+			itor++;
+	}
 
+	quadList.clear();
 }

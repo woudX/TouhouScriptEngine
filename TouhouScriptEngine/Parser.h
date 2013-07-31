@@ -48,7 +48,7 @@ public:
 	Expr* _factor();
 
 	CallFunc* _funcParam(Id* id);
-
+	Stmt* StmtOne_Special(string specialCmd, vector<string> params);	// ÌØÊâÉùÃ÷
 };
 
 #endif

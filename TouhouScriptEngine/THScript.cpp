@@ -1,11 +1,55 @@
 #include "THScript.h"
 #include "function.h"
 
-
-
-THScript::THScript():symRoot(NULL),_streamIdx(-1)
+THScript::THScript():symRoot(NULL)
 {
 
+}
+
+THScript::THScript(const THScript& rhs)
+	:fileName(rhs.fileName),
+	touhouScript(rhs.touhouScript),
+	title(rhs.title),
+	text(rhs.text),
+	music(rhs.music),
+	image(rhs.image),
+	background(rhs.background),
+	player(rhs.player),
+	scriptVersion(rhs.scriptVersion),
+	symRoot(new SymbolTable(*(rhs.symRoot)))
+{
+	for (vector<QuadGroup*>::const_iterator itor = rhs.scriptGroup.begin(); 
+		itor != rhs.scriptGroup.end(); ++itor)
+	{
+		QuadGroup* quadGroup = new QuadGroup(*(*itor));
+		scriptGroup.push_back(quadGroup);
+	}
+}
+
+THScript& THScript::operator= (const THScript& rhs)
+{
+	if (&rhs != this)
+	{
+		fileName = rhs.fileName;
+		touhouScript = rhs.touhouScript;
+		title = rhs.title;
+		text = rhs.text;
+		music = rhs.music;
+		image = rhs.image;
+		background = rhs.background;
+		player = rhs.player;
+		scriptVersion = rhs.scriptVersion;
+		symRoot = new SymbolTable(*(rhs.symRoot));
+
+		for (vector<QuadGroup*>::const_iterator itor = rhs.scriptGroup.begin();
+			itor != rhs.scriptGroup.end(); ++itor)
+		{
+			QuadGroup* quadGroup = new QuadGroup(*(*itor));
+			scriptGroup.push_back(quadGroup);
+		}
+	}
+
+	return *this;
 }
 
 void THScript::SetValue(string varStr, string value)
@@ -28,160 +72,89 @@ void THScript::SetValue(string varStr, string value)
 		scriptVersion = value;
 }
 
-void THScript::AddToStream(string str) 
+void THScript::_ClearNotGlobalSymTable(SymbolTable* symTable)
 {
-	vector<string> result = split(str, ' ');
-
-	for (int i = 0; i < result.size(); ++i)
+	// 重置所有子符号表的值
+	for (vector<SymbolTable*>::iterator itor = symTable->son.begin(); 
+		itor != symTable->son.end(); ++itor)
 	{
-		scriptStream.push_back(result[i]);
+		(*itor)->ResetSymbolTableValue();
 	}
 }
 
-string THScript::_NextWord()
+SymbolTable* THScript::_FindSymbolTableById(int id)
 {
-	++_streamIdx;
 
-	if (_streamIdx < scriptStream.size())
-		return scriptStream[_streamIdx];
-	else
-		return "NULL";
 }
 
-string THScript::_RetrackWord(int num)
+void THScript::Run()
 {
-	_streamIdx -= num;
+	// 重置变量值
+	_ClearNotGlobalSymTable(symRoot);
 
-	if (_streamIdx < 0)
-		cout << "脚本翻译过程中单词流越界" << endl;
-	else
-		return scriptStream[_streamIdx];
-}
+	// 设定当前变量层
+	SymbolTable* top = symRoot;
 
-void THScript::_MakeNewQuad(string op, string arg_1, string arg_2, string obj, string lineID)
-{
-	Quad* quad;
+	// 脚本运行栈空间
+	vector<string> stack;
 
-	if (op == "")
-		quad = new Quad("END", arg_1, arg_2, obj);
-	else
-		quad = new Quad(op, arg_1, arg_2, obj);
-
-	if (lineID != "")
-		quad->lineID = lineID;
-
-	_lastGroup->AddQuad(quad);
-}
-
-void THScript::TranslateScript()
-{
-	string st, op, arg_1, arg_2, obj;
-	string l_str,r_str, cmp_str;
-
-	while ((st = _NextWord()) != "NULL")
+	for (int s_idx = 0; s_idx < scriptGroup.size(); ++s_idx)
 	{
-		string lineID = "";
-		op = "", arg_1 = "", arg_2 = "", obj = "";
 
-		if (st[0] == '@')									// 脚本组
+		int count = scriptGroup[s_idx]->quadList.size();
+
+		// 遍历每一句话并执行
+		for (int c_idx = 0; c_idx < count; ++c_idx)
 		{
-			QuadGroup* quadGroup = new QuadGroup(st);
-			scriptGroup.push_back(quadGroup);
+			Quad* quad = scriptGroup[s_idx]->quadList[c_idx];
+			string op = quad->op, 
+				arg_1 = quad->arg1,
+				arg_2 = quad->arg2,
+				obj   = quad->obj;
 
-			_lastGroup = quadGroup;
-
-			continue;
-		}
-
-		while (st[st.length()- 1] == ':')					// 行号 
-		{
-			lineID += st;
-			st = _NextWord();
-		}
-
-		if (st == "iffalse" || st == "if")					// if、iffalse语句
-		{
-			op = st;
-
-			// 获取判断条件
-			l_str = _NextWord();
-			cmp_str = _NextWord();
-			
-			if (cmp_str == "goto")
+			if (op == "push")
 			{
-				obj = _NextWord();
+				stack.push_back(arg_1);
 			}
-			else
+			else if (op == "pop")
 			{
-				r_str = _NextWord();
-				arg_1 = l_str + " " + cmp_str + " " + r_str;
-
-				// 读取跳转行号
-				_NextWord();
-				obj = _NextWord();
-			}
-		}
-		else if (st == "push" || st == "call")
-		{
-			op = st;
-			arg_1 = _NextWord();
-		}
-		else if (st == "goto")
-		{
-			op = st;
-			obj = _NextWord();
-		}
-		else if (st[0] == '@')	// 进入下一区域
-		{
-			_MakeNewQuad("END", arg_1, arg_2, obj, lineID);	// 直接创建结尾语句
-			_RetrackWord(1);
-
-			continue;
-		}
-		else	// 存在赋值情况
-		{
-			obj = st;
-
-			st = _NextWord();
-			if (st == "+=" || st == "-=" || st == "*=" || st == "/=")	// 简化运算符
-			{
-				op = st;
-				arg_1 = _NextWord();
-			}
-			else if (st == "=")
-			{
-				st = _NextWord();
-
-				if (st == "+" || st == "++" || st == "-" || st == "--" || st == "!" || st == "call") // 一元运算符
+				for (int idx = 0; idx < StringToInt(arg_1); ++idx)
 				{
-					op = st;
-					arg_1 = _NextWord();
-				}
-				else 
-				{
-					arg_1 = st;
-
-					st = _NextWord();
-					if (st == "+" || st == "-" || st == "*" || st == "/" || st == ">" || st == ">=" || st == "<" 
-						|| st == "<=" || st == "==" || st == "!=")	// 二元运算符
-					{
-						op = st;
-						arg_2 = _NextWord();
-					}
-					else
-					{
-						op = "=";
-						_RetrackWord(1);
-					}
+					stack.pop_back();
 				}
 			}
-		}
+			else if (op == "SYS_F_ChangeTableArea")	// 变量作用域调整
+			{
+				// TO-DO: 更新符号表层
+			}
+			else if (op == "=")
+			{
+				double val = StringToDouble(arg_1);
 
-		_MakeNewQuad(op, arg_1, arg_2, obj, lineID);
+			}
+
+		}
 	}
 }
+
+
 
 THScript::~THScript()
 {
+	for (vector<QuadGroup*>::iterator itor = scriptGroup.begin(); itor != scriptGroup.end(); )
+		if (*itor == NULL)
+		{
+			delete *itor;
+			*itor = NULL;
+			itor = scriptGroup.erase(itor);
+		}
+		else
+			++itor;
+	scriptGroup.clear();
 
+	if (symRoot != NULL)
+	{
+		delete symRoot;
+		symRoot = NULL;
+	}
 }

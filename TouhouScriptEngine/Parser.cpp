@@ -80,11 +80,12 @@ void Parser::ScriptType()
 void Parser::ScriptAnalysis()
 {
 	// 创建新的脚本数据
-	THScript* scriptData = new THScript();
+	THScriptFull* scriptData = new THScriptFull();
 	scriptData->fileName = fileManager->fileName;
 	scriptMgr->AddTHScript(scriptData);
 	scriptMgr->lastScript->symRoot = new SymbolTable(NULL);		// 新建符号表
 	symTop = scriptMgr->lastScript->symRoot;
+	SymbolTable::_nextId = 0;		// 重置SymbolTableId编号
 
 	ScriptHeader();					// 分析脚本头部声明，鉴定脚本类型
 	ScriptType();					// 分析脚本类型及其内容
@@ -185,17 +186,19 @@ Stmt* Parser::Block()
 {
 	Match(LBRACE, ERR_BRACE);
 
-	// 建立下一层符号表并进入
+	// 建立下一层符号表
 	symTop = symTop->MakeNewSymbolTable();
-
+	Stmt* varAreaIn = StmtOne_Special("SYS_F_ChangeTableArea", vector<string>(1, IntToString(symTop->tableId)));
+	
 	Stmt* stmt = Stmts();
 
 	// 返回上一层符号表
 	symTop = symTop->father;
-
+	Stmt* varAreaOut = StmtOne_Special("SYS_F_ChangeTableArea", vector<string>(1, IntToString(symTop->tableId)));
+	
 	Match(RBRACE, ERR_BRACE);
 
-	return stmt;
+	return new Seq(varAreaIn, new Seq(stmt, varAreaOut));
 }
 
 Stmt* Parser::Stmts()
@@ -285,6 +288,27 @@ Stmt* Parser::StmtOne_Call()
 
 	return call;
 
+}
+
+Stmt* Parser::StmtOne_Special(string specialCmd, vector<string> params)
+{
+	Id* id = new Id(new Word(specialCmd, IDEN), Type::Func, Type::Func->width);
+	
+	CallFunc* callFunc = new CallFunc(id);
+
+	// 获取函数的所有参数
+
+	for (int idx = 0; idx < params.size(); idx++)
+	{
+		Expr* expr = new Expr(new Word(params[idx], -1), NULL);
+		callFunc->AddToParams(expr);
+	}
+
+	// 生成一个函数调用
+	Call* call = new Call();
+	call->init(callFunc);
+
+	return call;
 }
 
 Stmt* Parser::StmtOne_For()

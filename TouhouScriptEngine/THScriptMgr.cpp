@@ -15,9 +15,9 @@ THScriptMgr::THScriptMgr():lastScript(0)
 
 }
 
-THScript* THScriptMgr::GetTHScriptByFileName(string fileName)
+THScriptFull* THScriptMgr::GetTHScriptByFileName(string fileName)
 {
-	map<string, THScript*>::iterator itor;
+	map<string, THScriptFull*>::iterator itor;
 
 	if ((itor = scriptMap.find(fileName)) == scriptMap.end())
 		return NULL;
@@ -25,14 +25,14 @@ THScript* THScriptMgr::GetTHScriptByFileName(string fileName)
 		return itor->second;
 }
 
-THScript* THScriptMgr::GetTHScriptByTitle(string title)
+THScriptFull* THScriptMgr::GetTHScriptByTitle(string title)
 {
 	// TO-DO: ¿¼ÂÇ·ÏÆú
 
 	return NULL;
 }
 
-void THScriptMgr::AddTHScript(THScript* script)
+void THScriptMgr::AddTHScript(THScriptFull* script)
 {
 	if (script != NULL)
 	{

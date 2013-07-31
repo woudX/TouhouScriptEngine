@@ -10,6 +10,11 @@ string IntToString(int v_int)
 	return r_value;
 }
 
+int StringToInt(string str)
+{
+	return atoi(str.c_str());
+}
+
 string DoubleToString(double v_double)
 {
 	char _ptr[20];
@@ -25,6 +30,11 @@ string DoubleToString(double v_double)
 	string r_value(_ptr);
 
 	return r_value;
+}
+
+double StringToDouble(string str)
+{
+	return atof(str.c_str());
 }
 
 string AscToSign(int tag)
