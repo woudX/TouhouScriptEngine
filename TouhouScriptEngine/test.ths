@@ -19,7 +19,6 @@ script_stage_main
 	
 	@MainLoop
 	{
-	/*
 		var SYS_time;
 		SYS_time = (5 > 3) + (5 < 3);
 		
@@ -40,13 +39,17 @@ script_stage_main
 		var i = 3;
 		while (i >= 0)
 			i--;
-		*/
-		var i = 10;
-		while ( i > 0) {
-			i--;
-			sys_print("now_time_limits:",i);
+			
+		for (i = 0; i < 10; i++;)
+		{
+			var t;
+			if (i < 10)
+				t = 5;
+			else
+				t = i;
 		}
 	}
+	
 	@Finalize
 	{
 	}

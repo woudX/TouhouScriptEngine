@@ -1,7 +1,7 @@
 #include "THScriptFull.h"
 #include "function.h"
 
-THScriptFull::THScriptFull():_streamIdx(-1),_tableId(-1)
+THScriptFull::THScriptFull():_streamIdx(-1)
 {
 
 }
@@ -11,7 +11,6 @@ THScriptFull::THScriptFull(const THScriptFull& rhs):
 	_lastGroup(new QuadGroup(*(rhs._lastGroup)))
 {
 	_streamIdx = rhs._streamIdx;
-	_tableId = rhs._tableId;
 }
 
 THScriptFull& THScriptFull::operator= (const THScriptFull& rhs)
@@ -21,7 +20,6 @@ THScriptFull& THScriptFull::operator= (const THScriptFull& rhs)
 		scriptStream = rhs.scriptStream;
 		_lastGroup = new QuadGroup(*(rhs._lastGroup));
 		_streamIdx = rhs._streamIdx;
-		_tableId = rhs._tableId;
 	}
 
 	return *this;
@@ -57,12 +55,6 @@ string THScriptFull::_RetrackWord(int num)
 		return scriptStream[_streamIdx];
 }
 
-void THScriptFull::_AddTempToTable(string name)
-{
-	Symbol* sym = new Symbol(name, TYPE_DOUBLE, KIND_TVAR);
-	symRoot->_FindSymbolTable(_tableId)->AddSymbol(sym);
-}
-
 void THScriptFull::_MakeNewQuad(string op, string arg_1, string arg_2, string obj, string lineID)
 {
 	Quad* quad;
@@ -74,10 +66,6 @@ void THScriptFull::_MakeNewQuad(string op, string arg_1, string arg_2, string ob
 
 	if (lineID != "")
 		quad->lineID = lineID;
-
-	// 将临时变量加入符号表
-	if (isContain(obj, "SYS_T_"))
-		_AddTempToTable(obj);
 
 	_lastGroup->AddQuad(quad);
 }
@@ -118,7 +106,6 @@ void THScriptFull::TranslateScript()
 			
 			if (cmp_str == "goto")
 			{
-				arg_1 = l_str;
 				obj = _NextWord();
 			}
 			else
@@ -135,11 +122,6 @@ void THScriptFull::TranslateScript()
 		{
 			op = st;
 			arg_1 = _NextWord();
-
-			if (arg_1 == "SYS_F_ChangeTableArea") // 作用域调整
-			{
-				_tableId = StringToInt(_lastGroup->quadList.back()->arg1);
-			}
 		}
 		else if (st == "goto")
 		{
@@ -170,7 +152,7 @@ void THScriptFull::TranslateScript()
 				if (st == "+" || st == "++" || st == "-" || st == "--" || st == "!" || st == "call") // 一元运算符
 				{
 					op = st;
-					arg_2 = _NextWord();
+					arg_1 = _NextWord();
 				}
 				else 
 				{
@@ -182,10 +164,6 @@ void THScriptFull::TranslateScript()
 					{
 						op = st;
 						arg_2 = _NextWord();
-					}
-					else if ( st == "++" || st == "--")	//后置++ --
-					{
-						op = st;
 					}
 					else
 					{

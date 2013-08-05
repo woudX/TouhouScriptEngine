@@ -141,18 +141,3 @@ vector<string> split(string str, char ch)
 
 	return result;
 }
-
-int isContain(string str, string substr)
-{
-	if (strstr(str.c_str(), substr.c_str()) != NULL)
-		return 1;
-	else 
-		return 0;
-}
-
-string removeSystemMark(string str, string substr)
-{
-	string ans(str.begin() + substr.length(), str.end());
-
-	return ans;
-}

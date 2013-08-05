@@ -315,10 +315,10 @@ Expr* Logical::gen()
 	int a = newlabel();
 	Temp* temp = new Temp(type);
 	this->jumping(0, f);
-	emit(temp->ToString() + " = 1");
+	emit(temp->ToString() + " = true");
 	emit("goto L" + IntToString(a));
 	emitlabel(f);
-	emit(temp->ToString() + " = 0");
+	emit(temp->ToString() + " = false");
 	emitlabel(a);
 
 	return temp;
