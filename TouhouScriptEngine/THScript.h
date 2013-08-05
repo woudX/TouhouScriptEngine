@@ -21,15 +21,18 @@ public:
 	vector<QuadGroup*>	scriptGroup;	// 脚本代码库
 	SymbolTable*		symRoot;		// 脚本变量表
 
+	SymbolTable* _top;			// 当前分析时的变量层
+
 	THScript();
 	THScript(const THScript& rhs);
 	THScript& operator= (const THScript& rhs);
 	~THScript();
 
-	void SetValue(string varStr, string value);		// 设定脚本参数值
-	void Run();										// 脚本执行一次
-	void _ClearNotGlobalSymTable(SymbolTable* symTable);					// 清空所有非全局变量的值
-	SymbolTable* _FindSymbolTableById(int id);		// 通过id查找对应符号表
-	
+	void	SetValue(string varStr, string value);		// 设定脚本参数值
+	void	Run();										// 脚本执行一次
+	void	_clearNotGlobalSymTable(SymbolTable* symTable);					// 清空所有非全局变量的值
+	double	_getVal(string arg);						// 获取一个参数实际的值(这意味着他可能是一个变量，或者就是一个常数)
+	int		_goto(int scriptGroupId, string lineId);						// 跳转到指定行数继续执行
+	int		_iffalse(string l_str, string cmp_str, string r_str);			// 返回iffalse的判断条件
 };
 #endif // !_H_THSCRIPT

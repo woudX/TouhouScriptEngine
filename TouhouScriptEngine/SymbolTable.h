@@ -25,6 +25,7 @@ public:
 	Symbol* GetSymbol(string name);		// 获得一个符号
 
 	Symbol* _FindSymbol(SymbolTable* symTable,string name);	// 在指定符号表中搜索指定名称的符号
+	SymbolTable* _FindSymbolTable(int id);					// 根据指定的Id寻找该符号表以下同Id的符号表并返回
 
 	~SymbolTable();
 	

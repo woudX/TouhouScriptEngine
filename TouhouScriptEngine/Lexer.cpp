@@ -126,6 +126,7 @@ string Double::ToString()
 Type* Type::Double = new Type("double", DOUBLETK, 8);
 Type* Type::Int = new Type("int", INTTK, 4);
 Type* Type::Func = new Type("func", FUNCTK ,1);
+Type* Type::String = new Type("string", STRCON, 1);
 
 Type::Type():width(0)
 {
@@ -401,7 +402,7 @@ Token* Lexer::Scan()
 		return new Double(doubleValue);
 	}
 
-	if (isalpha(peek) || (peek == '@' || peek == '#'))		// 如果是字符串或者是特定的字串
+	if (isalpha(peek) || (peek == '@' || peek == '#' || peek == '_'))		// 如果是字符串或者是特定的字串
 	{
 		string bufferStr = getString();
 		

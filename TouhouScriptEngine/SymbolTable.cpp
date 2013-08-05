@@ -95,6 +95,22 @@ Symbol* SymbolTable::_FindSymbol(SymbolTable* symTable, string name)
 	}
 }
 
+SymbolTable* SymbolTable::_FindSymbolTable(int id) 
+{
+	if (tableId == id)
+		return this;
+
+	for (int idx = 0; idx < son.size(); ++idx)
+	{
+		SymbolTable* tempTable = son[idx]->_FindSymbolTable(id);
+
+		if (tempTable != NULL)
+			return tempTable;
+	}
+
+	return NULL;
+}
+
 SymbolTable::~SymbolTable()
 {
 	for (map<string, Symbol*>::iterator itor = symbolMap.begin(); itor != symbolMap.end(); )

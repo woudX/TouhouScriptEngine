@@ -6,8 +6,7 @@
 #include "Object.h"
 int main()
 {
-	int a,b;
-	a = 2, b = 3;
+
 
 	FileMgr* fileManager = 0;
 	fileManager = fileManager->Instance();
@@ -27,7 +26,8 @@ int main()
 	scriptMgr = scriptMgr->Instance();
 
 	Object* object = new Object(scriptMgr->GetTHScriptByFileName("test.ths"));
-	delete scriptMgr->GetTHScriptByFileName("test.ths");
+
+	object->script->Run();
 
 	return 0;
 }

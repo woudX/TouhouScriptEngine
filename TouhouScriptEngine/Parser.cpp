@@ -600,6 +600,17 @@ Expr* Parser::_factor()
 			Move();
 			return expr;
 		}
+	case STRCON:
+		{
+			Token* token(look);
+			((Word*)token)->lexeme = "SYS_STR_" + ((Word*)token)->lexeme;
+
+			expr = new Constant(token, Type::String);
+			
+			expr->lexline = lexer->line;
+			Move();
+			return expr;
+		}
 	case IDEN:
 		{
 			string name = look->ToString();
