@@ -53,7 +53,7 @@ public:
 class Type : public Word {
 public:
 	int width;			// 用于分配存储空间
-	static Type *Double, *Int, *Func;
+	static Type *Double, *Int, *Func, *String;
 
 	Type();
 	Type(string s, int tag, int w);
