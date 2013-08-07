@@ -80,17 +80,22 @@ void Parser::ScriptType()
 void Parser::ScriptAnalysis()
 {
 	// 创建新的脚本数据
-	THScriptFull* scriptData = new THScriptFull();
+	THScript* scriptData = new THScript();
 	scriptData->fileName = fileManager->fileName;
+
 	scriptMgr->AddTHScript(scriptData);
 	scriptMgr->lastScript->symRoot = new SymbolTable(NULL);		// 新建符号表
 	symTop = scriptMgr->lastScript->symRoot;
 	SymbolTable::_nextId = 0;		// 重置SymbolTableId编号
 
+	// 创建翻译机
+	Translator* translator = new Translator();
+	scriptMgr->lastTranslator = translator;
+
 	ScriptHeader();					// 分析脚本头部声明，鉴定脚本类型
 	ScriptType();					// 分析脚本类型及其内容
 
-	scriptMgr->lastScript->TranslateScript();		// 语法分析结束后开始第一轮翻译
+	translator->Translate(scriptMgr->lastScript);	// 语法分析结束后开始第一轮翻译	
 	
 }
 
@@ -170,7 +175,7 @@ int Parser::FuncHeader()
 	// 临时处理
 	if (look->tag != RBRACE)
 	{
-		scriptMgr->lastScript->AddToStream(look->ToString());	// 添加到脚本中间代码刘
+		scriptMgr->lastTranslator->Add(look->ToString());	// 添加到脚本中间代码刘
 
 		cout << endl << "------" + look->ToString() + "------" << endl;
 		Move();
@@ -254,7 +259,7 @@ Stmt* Parser::StmtOne_If()
 Stmt* Parser::StmtOne_While()
 {
 	Expr* expr;
-	Stmt *l_stmt, *r_stmt;
+	Stmt *l_stmt;
 
 	Move();
 
@@ -297,8 +302,8 @@ Stmt* Parser::StmtOne_Special(string specialCmd, vector<string> params)
 	CallFunc* callFunc = new CallFunc(id);
 
 	// 获取函数的所有参数
-
-	for (int idx = 0; idx < params.size(); idx++)
+	int _count = params.size();
+	for (int idx = 0; idx < _count; idx++)
 	{
 		Expr* expr = new Expr(new Word(params[idx], -1), NULL);
 		callFunc->AddToParams(expr);
@@ -641,7 +646,11 @@ Expr* Parser::_factor()
 			}
 		}
 	default:
-		break;
+		{
+			assert(!"Parser statement error(Invalid expression)");
+			return expr;
+		}
+		
 	}
 
 }

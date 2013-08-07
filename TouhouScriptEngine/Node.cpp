@@ -26,7 +26,7 @@ void Node::emitlabel(int i)
 	THScriptMgr* scriptMgr = 0;
 	scriptMgr = scriptMgr->Instance();
 
-	scriptMgr->lastScript->AddToStream("L" + IntToString(i) + ":");
+	scriptMgr->lastTranslator->Add("L" + IntToString(i) + ":");
 
 	cout << "L" << i << ":";
 }
@@ -36,7 +36,7 @@ void Node::emit(string s)
 	THScriptMgr* scriptMgr = 0;
 	scriptMgr = scriptMgr->Instance();
 
-	scriptMgr->lastScript->AddToStream(s);
+	scriptMgr->lastTranslator->Add(s);
 
 	cout << "\t" << s << endl;
 }

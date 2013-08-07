@@ -11,6 +11,7 @@
 #include <list>
 #include <map>
 #include <regex>
+#include <assert.h>
 
 using namespace std;
 

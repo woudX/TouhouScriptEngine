@@ -146,7 +146,9 @@ int THScript::_iffalse(string l_str, string cmp_str, string r_str)
 
 void THScript::Run()
 {
-	for (int s_idx = 0; s_idx < scriptGroup.size(); ++s_idx)
+	int count = static_cast<int>(scriptGroup.size());
+
+	for (int s_idx = 0; s_idx < count; ++s_idx)
 	{
 		// 重置变量值
 		//_ClearNotGlobalSymTable(symRoot);
