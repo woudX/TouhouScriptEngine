@@ -12,6 +12,28 @@ SymbolTable::SymbolTable(SymbolTable* father):father(father),sonIndex(-1),tableI
 
 }
 
+SymbolTable::SymbolTable(const SymbolTable& rhs):sonIndex(rhs.sonIndex),tableId(rhs.tableId)
+{
+	this->father = NULL;
+
+	// 构造当前层符号表
+	for (map<string, Symbol*>::const_iterator itor = rhs.symbolMap.begin(); 
+		itor != rhs.symbolMap.end(); ++itor)
+	{
+		Symbol* second = new Symbol(*itor->second);
+		this->symbolMap.insert(make_pair(itor->first, second));
+	}
+
+	// 构造当前层的子层
+	for (vector<SymbolTable*>::const_iterator itor = rhs.son.begin(); 
+		itor != rhs.son.end(); ++itor)
+	{
+		SymbolTable* symbolTable = new SymbolTable(**itor);
+		symbolTable->father = this;
+		this->son.push_back(symbolTable);
+	}
+}
+
 SymbolTable* SymbolTable::MakeNewSymbolTable()
 {
 	SymbolTable* symTable = new SymbolTable(this);

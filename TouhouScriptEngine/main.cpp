@@ -4,10 +4,13 @@
 #include "SymbolTable.h"
 #include "THScriptMgr.h"
 #include "Object.h"
+#include "ScriptExec.h"
+#include "Point2d.h"
+#include "Vector2d.h"
+
+
 int main()
 {
-
-
 	FileMgr* fileManager = 0;
 	fileManager = fileManager->Instance();
 
@@ -25,9 +28,9 @@ int main()
 	THScriptMgr* scriptMgr = 0;
 	scriptMgr = scriptMgr->Instance();
 
-	Object* object = new Object(scriptMgr->GetTHScriptByFileName("test.ths"));
-
-	object->script->Run();
+	// 转化为可执行脚本
+	ScriptExec* scriptexec = new ScriptExec(scriptMgr->GetTHScriptByFileName("test.ths"));
+	scriptexec->Run();
 
 	return 0;
 }

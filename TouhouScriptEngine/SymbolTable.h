@@ -15,7 +15,9 @@ public:
 	int tableId;						// 符号表Id，用以区分不同的符号表
 	
 	SymbolTable();
-	SymbolTable(SymbolTable* father);
+	explicit SymbolTable(SymbolTable* father);
+	explicit SymbolTable(const SymbolTable& rhs);
+	
 
 	void AddSymbol(Symbol* symbol);		// 添加一个新符号=
 	void ResetSymbolTableStatus();		// 重置所有符号表的状态
@@ -28,7 +30,9 @@ public:
 	SymbolTable* _FindSymbolTable(int id);					// 根据指定的Id寻找该符号表以下同Id的符号表并返回
 
 	~SymbolTable();
-	
+
+private:
+	SymbolTable* operator= (const SymbolTable& ths);		// 禁止赋值复制构造
 };
 
 #endif // !_H_SYMBOLTABLE

@@ -8,6 +8,8 @@ class ScriptExec
 public:
 	ScriptExec(THScript* script);
 	~ScriptExec();
+
+	void Run();
 private:	
 	ScriptExec_Impl *_pImpl;
 };

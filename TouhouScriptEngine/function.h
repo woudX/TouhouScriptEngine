@@ -1,9 +1,15 @@
 #ifndef _H_FUNCTION
 #define _H_FUNCTION
 
-#include "stdafx.h"
-
 using namespace std;
+
+// 常量表
+extern const double MATH_PI;
+extern const double MATH_PI_D;
+
+// 数学函数
+extern double reg(double _deg);
+extern double deg(double _reg);
 
 // 转换函数
 extern string IntToString(int v_int);

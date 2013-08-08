@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "function.h"
 #include "Tag.h"
 
@@ -155,4 +156,20 @@ string removeSystemMark(string str, string substr)
 	string ans(str.begin() + substr.length(), str.end());
 
 	return ans;
+}
+
+/// 数学计算部分
+//////////////////////////////////////////////////////////////////////////
+
+const double MATH_PI	= 3.1415926;
+const double MATH_PI_D	= 180; 
+
+double deg(double _reg)
+{
+	return _reg / MATH_PI * MATH_PI_D;
+}
+
+double reg(double _deg)
+{
+	return _deg / MATH_PI_D * MATH_PI;
 }
